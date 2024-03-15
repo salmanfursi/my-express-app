@@ -1,22 +1,24 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
+
 app.use(express.json());
 
-//hardcoded data for get example
+// Hardcoded data of user 
 const users = [
   { id: 1, username: 'salman', password: 'ttt444' },  
   { id: 2, username: 'kawser', password: '555yyy' },  
   { id: 3, username: 'hira', password: 'ddd333' },    
 ];
 
-// api for get all data
+// Get all users
 app.get('/users', (req, res) => {
-  const userList = users.map(user => ({ id: user.id, username: user.username,password:user.password }));
+  // maping them to show all of the user document in preview
+  const userList = users.map(user => ({ id: user.id, username: user.username }));
   res.json(userList);
 });
 
-// api for get single data
+// Get a single user by ID
 app.get('/users/:id', (req, res) => {
   const userId = parseInt(req.params.id);
   const user = users.find(user => user.id === userId);
@@ -24,28 +26,32 @@ app.get('/users/:id', (req, res) => {
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
+  // return the desired field
   res.json({ id: user.id, username: user.username });
 });
 
-//api for post single document
+// for creatin a new user 
 app.post('/users', (req, res) => {
-  res.send({ message: 'User created succesfully' });
+  // hare need to validate the data after making the user
+  res.status(201).json({ message: 'user created successfully' });
 });
 
-// api for update single document
+// Update a user by ID
 app.put('/users/:id', (req, res) => {
-  res.status(405).json({ message: 'User update succesfully' });
+  res.status(405).json({ message: 'update operation not allowed' });
 });
 
-// api for delete single document
+// Delete a user by ID
 app.delete('/users/:id', (req, res) => {
-  res.status(405).json({ message: 'User deletion succesfully' });
+  res.status(405).json({ message: 'dletion operation not allowed' });
 });
 
-// server running confirmation
+// default home route
 app.get('/', (req, res) => {
-  res.send("welcome to sample server");
+  res.send("Welcome to the sample server");
 });
+
+// server listening msg
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
